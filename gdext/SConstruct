@@ -45,7 +45,7 @@ elif linux:
     if not os.path.exists("vcpkg_installed"):
         subprocess.call("$VCPKG_ROOT/vcpkg install", shell=True)
 elif android:
-    arch_map = {"arm64": "arm64-android", "arm32": "arm-android", "x86_64": "x86_64-android"}
+    arch_map = {"arm64": "arm64-android", "arm32": "arm-android", "x86_64": "x64-android"}
     triplet = arch_map.get(env["arch"], "arm64-android")
     if not os.path.exists(f"vcpkg_installed/{triplet}"):
         subprocess.call(f"$VCPKG_ROOT/vcpkg install --triplet {triplet} --host-triplet x64-linux", shell=True)
