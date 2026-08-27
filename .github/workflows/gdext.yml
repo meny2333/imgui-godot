@@ -167,14 +167,12 @@ jobs:
           python -m pip install "scons<4.8"
           pip install ply
 
-      - name: Setup NDK
-        uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r23c
-
-      - name: Export NDK env
+      - name: Install NDK (23.2.8568313)
         shell: bash
         run: |
+          SDKMANAGER=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+          [ -x "$SDKMANAGER" ] || SDKMANAGER=$(command -v sdkmanager)
+          yes | "$SDKMANAGER" "ndk;23.2.8568313" >/dev/null
           echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/23.2.8568313" >> $GITHUB_ENV
           echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/23.2.8568313" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
