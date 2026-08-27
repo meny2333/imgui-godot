@@ -185,6 +185,8 @@ jobs:
 
       - name: Build
         shell: bash
+        env:
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
           scons platform=android arch=${{ matrix.arch }} target=template_debug godot-cpp
