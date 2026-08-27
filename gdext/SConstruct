@@ -76,15 +76,21 @@ env.Append(CPPDEFINES=["IMGUI_ENABLE_FREETYPE"])
 # env.Append(CPPDEFINES=["IMGUI_ENABLE_FREETYPE_LUNASVG"])
 sources += Glob("imgui/misc/freetype/*.cpp")
 libpath += [f"vcpkg_installed/{triplet}/lib"]
-libs += [
-    "freetype",
-    # "lunasvg",
-    "bz2",
-    "libpng16" if windows else "png16",
-    "zlib" if windows else "z",
-    "brotlidec",
-    "brotlicommon",
-]
+if windows:
+    # Link the actual static lib files by path: their names differ across
+    # vcpkg baselines/toolchains (e.g. -lz vs -lzs, -lpng16 vs png16_static).
+    lib_files = sorted(glob(f"vcpkg_installed/{triplet}/lib/*.a"))
+    lib_files += sorted(glob(f"vcpkg_installed/{triplet}/lib/*.lib"))
+    libs += lib_files
+else:
+    libs += [
+        "freetype",
+        "bz2",
+        "png16",
+        "z",
+        "brotlidec",
+        "brotlicommon",
+    ]
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
