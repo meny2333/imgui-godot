@@ -122,6 +122,8 @@ jobs:
 
       - name: Build
         if: github.ref_type != 'tag' || runner.os != 'Windows'
+        env:
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
           scons precision=${{ matrix.precision }} godot-cpp
@@ -131,6 +133,8 @@ jobs:
 
       - name: Build (with debug symbols)
         if: github.ref_type == 'tag' && runner.os == 'Windows'
+        env:
+          VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
           scons precision=${{ matrix.precision }} debug_symbols=yes godot-cpp
