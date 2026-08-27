@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  vcpkg_tag: 6f29f12e82a8293156836ad81cc9bf5af41fe836 # 2025.01.13
+  vcpkg_tag: ddd0023b0eee70986e42ed49d9d4afb8098f212e # 2026.08.25
 
 jobs:
   build:
