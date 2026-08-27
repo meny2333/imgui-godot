@@ -43,12 +43,12 @@ struct GdsPtr<String>
 
     GdsPtr(Array& x, size_t s, const StringName& label) : arr(x), buf(gdscache->GetTextBuf(label, s, x))
     {
-        bufhash = std::hash<std::string_view>{}({buf.begin(), buf.end()});
+        bufhash = std::hash<std::string_view>{}(std::string_view(buf.data(), buf.size()));
     }
 
     ~GdsPtr()
     {
-        if (bufhash != std::hash<std::string_view>{}({buf.begin(), buf.end()}))
+        if (bufhash != std::hash<std::string_view>{}(std::string_view(buf.data(), buf.size())))
         {
             arr[0] = String::utf8(buf.data());
         }
