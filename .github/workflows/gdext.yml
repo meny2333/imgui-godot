@@ -143,6 +143,60 @@ jobs:
           name: gdext-${{ matrix.precision }}-${{ runner.os }}
           path: addons/imgui-godot/bin
 
+  build_android:
+    name: 🤖Android (${{ matrix.arch }})
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [arm64, arm32, x86_64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Python 3.x
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install tools
+        shell: bash
+        run: |
+          python -m pip install "scons<4.8"
+          pip install ply
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install NDK
+        shell: bash
+        run: |
+          echo "y" | sdkmanager --install "ndk;25.2.9519653"
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/25.2.9519653" >> $GITHUB_ENV
+          echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653" >> $GITHUB_ENV
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: ${{ env.vcpkg_tag }}
+
+      - name: Build
+        shell: bash
+        run: |
+          cd gdext
+          scons platform=android arch=${{ matrix.arch }} target=template_debug godot-cpp
+          scons platform=android arch=${{ matrix.arch }} target=template_debug
+          scons platform=android arch=${{ matrix.arch }} target=template_release godot-cpp
+          scons platform=android arch=${{ matrix.arch }} target=template_release
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdext-single-android-${{ matrix.arch }}
+          path: addons/imgui-godot/bin
+
   package:
     name: 📦Package
     runs-on: ubuntu-latest

@@ -26,6 +26,7 @@ env.Replace(CXXFLAGS=str(env["CXXFLAGS"]).replace("c++17", "c++20"))
 
 windows = env["platform"] == "windows"
 linux = env["platform"] == "linux"
+android = env["platform"] == "android"
 config = "release" if env["target"] == "template_release" else "debug"
 
 if config == "release":
@@ -43,6 +44,11 @@ elif linux:
     triplet = "x64-linux"
     if not os.path.exists("vcpkg_installed"):
         subprocess.call("$VCPKG_ROOT/vcpkg install", shell=True)
+elif android:
+    arch_map = {"arm64": "arm64-android", "arm32": "arm-android", "x86_64": "x86_64-android"}
+    triplet = arch_map.get(env["arch"], "arm64-android")
+    if not os.path.exists(f"vcpkg_installed/{triplet}"):
+        subprocess.call(f"$VCPKG_ROOT/vcpkg install --triplet {triplet} --host-triplet x64-linux", shell=True)
 else:
     triplet = "arm64-osx"
     if not os.path.exists("vcpkg_installed"):
