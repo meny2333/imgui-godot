@@ -34,8 +34,17 @@ struct Fonts::Impl
         ImVector<ImWchar> rv;
         if (!font.is_null())
         {
+            String chars = font->get_supported_chars();
             ImFontGlyphRangesBuilder builder;
-            builder.AddText(font->get_supported_chars().utf8().get_data());
+            if (chars.length() > 5000)
+            {
+                builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesDefault());
+                builder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesChineseSimplifiedCommon());
+            }
+            else
+            {
+                builder.AddText(chars.utf8().get_data());
+            }
             builder.BuildRanges(&rv);
         }
         return rv;
@@ -98,6 +107,10 @@ void Fonts::Impl::AddFontToAtlas(const FontParams& fp, float scale)
     else
     {
         fs::path fontpath = (fp.font->get_path().utf8().get_data());
+
+        fc.OversampleH = 1;
+        fc.OversampleV = 1;
+        fc.PixelSnapH = true;
 
         // no std::format in Clang 14
         std::string fontdesc = fontpath.filename().string() + ", "s + std::to_string(fontSize) + "px";

@@ -18,6 +18,8 @@ class CustomCacheDir(SCons.CacheDir.CacheDir):
         return None
 
 
+api_version = ARGUMENTS.get("api_version", "4.7")
+Export("api_version")
 env = SConscript("godot-cpp/SConstruct")
 env.CacheDir("scons_cache", CustomCacheDir)
 env.Append(CPPDEFINES=['IMGUI_USER_CONFIG="\\"imconfig-godot.h\\""', "IGN_EXPORT"])

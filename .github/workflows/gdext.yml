@@ -126,10 +126,10 @@ jobs:
           VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
-          scons precision=${{ matrix.precision }} godot-cpp
-          scons precision=${{ matrix.precision }}
-          scons precision=${{ matrix.precision }} target=template_release godot-cpp
-          scons precision=${{ matrix.precision }} target=template_release
+          scons api_version=4.7 precision=${{ matrix.precision }} godot-cpp
+          scons api_version=4.7 precision=${{ matrix.precision }}
+          scons api_version=4.7 precision=${{ matrix.precision }} target=template_release godot-cpp
+          scons api_version=4.7 precision=${{ matrix.precision }} target=template_release
 
       - name: Build (with debug symbols)
         if: github.ref_type == 'tag' && runner.os == 'Windows'
@@ -137,10 +137,10 @@ jobs:
           VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
-          scons precision=${{ matrix.precision }} debug_symbols=yes godot-cpp
-          scons precision=${{ matrix.precision }} debug_symbols=yes
-          scons precision=${{ matrix.precision }} debug_symbols=yes target=template_release godot-cpp
-          scons precision=${{ matrix.precision }} debug_symbols=yes target=template_release
+          scons api_version=4.7 precision=${{ matrix.precision }} debug_symbols=yes godot-cpp
+          scons api_version=4.7 precision=${{ matrix.precision }} debug_symbols=yes
+          scons api_version=4.7 precision=${{ matrix.precision }} debug_symbols=yes target=template_release godot-cpp
+          scons api_version=4.7 precision=${{ matrix.precision }} debug_symbols=yes target=template_release
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
@@ -193,10 +193,10 @@ jobs:
           VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
-          scons platform=android arch=${{ matrix.arch }} target=template_debug godot-cpp
-          scons platform=android arch=${{ matrix.arch }} target=template_debug
-          scons platform=android arch=${{ matrix.arch }} target=template_release godot-cpp
-          scons platform=android arch=${{ matrix.arch }} target=template_release
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_debug godot-cpp
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_debug
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_release godot-cpp
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_release
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4

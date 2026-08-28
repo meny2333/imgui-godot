@@ -52,10 +52,10 @@ jobs:
           VCPKG_BINARY_SOURCES: clear
         run: |
           cd gdext
-          scons platform=android arch=${{ matrix.arch }} target=template_debug godot-cpp
-          scons platform=android arch=${{ matrix.arch }} target=template_debug
-          scons platform=android arch=${{ matrix.arch }} target=template_release godot-cpp
-          scons platform=android arch=${{ matrix.arch }} target=template_release
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_debug godot-cpp
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_debug
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_release godot-cpp
+          scons api_version=4.7 platform=android arch=${{ matrix.arch }} target=template_release
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
