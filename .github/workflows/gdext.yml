@@ -236,8 +236,8 @@ jobs:
           cd addons/imgui-godot/bin
           mv gdext-*/* .
           rmdir gdext-*
-          rm *.exp
-          rm *.lib
+          rm -f *.exp
+          rm -f *.lib
 
       - name: Upload PDBs
         if: github.ref_type == 'tag' && matrix.precision == 'single'
