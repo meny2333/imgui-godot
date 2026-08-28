@@ -34,12 +34,14 @@ if config == "release":
         env.Append(CPPDEFINES=["NDEBUG"])
 
 if windows:
+    mingw = bool(env.get("use_mingw")) or "g++" in str(env.get("CXX", "")).lower()
     if env["arch"] == "arm64":
-        triplet = "arm64-windows-static"
+        triplet = "arm64-mingw-static" if mingw else "arm64-windows-static"
     else:
-        triplet = "x64-windows-static"
+        triplet = "x64-mingw-static" if mingw else "x64-windows-static"
     if not os.path.exists(f"vcpkg_installed/{triplet}"):
-        subprocess.call(f'"%VCPKG_ROOT%/vcpkg" install --triplet {triplet}', shell=True)
+        host = f" --host-triplet {triplet}" if mingw else ""
+        subprocess.call(f'"%VCPKG_ROOT%/vcpkg" install --triplet {triplet}{host}', shell=True)
 elif linux:
     triplet = "x64-linux"
     if not os.path.exists("vcpkg_installed"):
@@ -76,22 +78,14 @@ env.Append(CPPDEFINES=["IMGUI_ENABLE_FREETYPE"])
 # env.Append(CPPDEFINES=["IMGUI_ENABLE_FREETYPE_LUNASVG"])
 sources += Glob("imgui/misc/freetype/*.cpp")
 libpath += [f"vcpkg_installed/{triplet}/lib"]
-if windows:
-    # Link the actual static lib files by absolute path: their names differ
-    # across vcpkg baselines/toolchains (e.g. -lz vs -lzs, -lpng16 vs libpng16).
-    # scons passes LIBS entries as -l<name> unless they are absolute file paths.
-    lib_files = [os.path.abspath(f) for f in glob(f"vcpkg_installed/{triplet}/lib/*.a")]
-    lib_files += [os.path.abspath(f) for f in glob(f"vcpkg_installed/{triplet}/lib/*.lib")]
-    libs += lib_files
-else:
-    libs += [
-        "freetype",
-        "bz2",
-        "png16",
-        "z",
-        "brotlidec",
-        "brotlicommon",
-    ]
+libs += [
+    "freetype",
+    "bz2",
+    "libpng16" if windows and "mingw" not in triplet else "png16",
+    "zlib" if windows and "mingw" not in triplet else "z",
+    "brotlidec",
+    "brotlicommon",
+]
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
