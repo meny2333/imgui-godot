@@ -77,10 +77,11 @@ env.Append(CPPDEFINES=["IMGUI_ENABLE_FREETYPE"])
 sources += Glob("imgui/misc/freetype/*.cpp")
 libpath += [f"vcpkg_installed/{triplet}/lib"]
 if windows:
-    # Link the actual static lib files by path: their names differ across
-    # vcpkg baselines/toolchains (e.g. -lz vs -lzs, -lpng16 vs png16_static).
-    lib_files = sorted(glob(f"vcpkg_installed/{triplet}/lib/*.a"))
-    lib_files += sorted(glob(f"vcpkg_installed/{triplet}/lib/*.lib"))
+    # Link the actual static lib files by absolute path: their names differ
+    # across vcpkg baselines/toolchains (e.g. -lz vs -lzs, -lpng16 vs libpng16).
+    # scons passes LIBS entries as -l<name> unless they are absolute file paths.
+    lib_files = [os.path.abspath(f) for f in glob(f"vcpkg_installed/{triplet}/lib/*.a")]
+    lib_files += [os.path.abspath(f) for f in glob(f"vcpkg_installed/{triplet}/lib/*.lib")]
     libs += lib_files
 else:
     libs += [
