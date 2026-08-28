@@ -171,15 +171,15 @@ jobs:
           python -m pip install "scons<4.8"
           pip install ply
 
-      - name: Install NDK (23.2.8568313)
+      - name: Install NDK (28.1.13356709)
         shell: bash
         run: |
           mkdir -p "$ANDROID_SDK_ROOT/ndk"
-          curl -fsSL https://dl.google.com/android/repository/android-ndk-r23c-linux.zip -o /tmp/ndk.zip
+          curl -fsSL https://dl.google.com/android/repository/android-ndk-r28b-linux.zip -o /tmp/ndk.zip
           unzip -q /tmp/ndk.zip -d /tmp/ndk
-          mv /tmp/ndk/android-ndk-r23c "$ANDROID_SDK_ROOT/ndk/23.2.8568313"
-          echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/23.2.8568313" >> $GITHUB_ENV
-          echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/23.2.8568313" >> $GITHUB_ENV
+          mv /tmp/ndk/android-ndk-r28b "$ANDROID_SDK_ROOT/ndk/28.1.13356709"
+          echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/28.1.13356709" >> $GITHUB_ENV
+          echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/28.1.13356709" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
 
       - name: Setup vcpkg
