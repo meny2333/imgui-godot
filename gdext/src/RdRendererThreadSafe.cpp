@@ -4,7 +4,9 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/rendering_server.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <memory>
 #include <mutex>
+#include <vector>
 
 using namespace godot;
 

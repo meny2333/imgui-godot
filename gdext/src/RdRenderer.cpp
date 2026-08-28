@@ -281,10 +281,7 @@ void RdRenderer::Render(RID fb, ImDrawData* drawData)
 
     // draw
     const int64_t dl = RD->draw_list_begin(fb,
-                                           RenderingDevice::INITIAL_ACTION_CLEAR,
-                                           RenderingDevice::FINAL_ACTION_READ,
-                                           RenderingDevice::INITIAL_ACTION_CLEAR,
-                                           RenderingDevice::FINAL_ACTION_READ,
+                                           RenderingDevice::DRAW_CLEAR_COLOR_ALL,
                                            impl->clearColors);
 
     RD->draw_list_bind_render_pipeline(dl, impl->pipeline);
